@@ -30,9 +30,14 @@ function DashboardSideBar() {
       <VStack w='full' spacing={3}>
         <Link href='/dashboard'>
           <VStack>
-            <Avatar name={loading ? '...' : user.email}></Avatar>
-            <Text fontSize='sm' color='gray.600' fontWeight='bold'>
-              {loading ? '...' : user.email}
+            <Avatar name={loading ? '...' : user?.displayName}></Avatar>
+            <Text
+              w='90%'
+              fontSize='sm'
+              textAlign='center'
+              color='gray.600'
+              fontWeight='bold'>
+              {loading ? '...' : user?.displayName}
             </Text>
           </VStack>
         </Link>

@@ -8,13 +8,13 @@ import {
   Button,
   HStack,
   Text,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 import Link from '../src/components/Link'
 import { useRouter } from 'next/router'
 import { useAuth } from '../src/firebase/AuthProvider'
 
 function Login() {
-  const router = useRouter()
   const { firebaseSignInWithEmailAndPassword, error } = useAuth()
 
   function handleLogin(e) {
@@ -38,16 +38,18 @@ function Login() {
           <Heading size='lg' color='teal' mb={4}>
             Controle de estoque
           </Heading>
-          {error && error.message}
-          <FormControl mb='2'>
+          <FormControl mb='2' isInvalid={error}>
             {/* <FormLabel htmlFor='email' mb={0}>
               Username
             </FormLabel> */}
+            {error && (
+              <FormErrorMessage pb={2}>{error.message}</FormErrorMessage>
+            )}
             <Input
               id='email'
               variant='flushed'
               type='text'
-              placeholder='email'></Input>
+              placeholder='Email'></Input>
           </FormControl>
           <FormControl mb='2'>
             {/* <FormLabel htmlFor='password' mb={0}>

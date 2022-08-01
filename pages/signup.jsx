@@ -1,6 +1,7 @@
 import {
   Flex,
   FormControl,
+  FormErrorMessage,
   Heading,
   Input,
   VStack,
@@ -12,14 +13,14 @@ import Link from '../src/components/Link'
 import { useAuth } from '../src/firebase/AuthProvider'
 
 function Signup() {
-  const { firebaseSignUpWithEmailAndPassword } = useAuth()
-  console.log(useAuth())
+  const { firebaseSignUpWithEmailAndPassword, error } = useAuth()
 
   function handleSignUpButton(e) {
     e.preventDefault()
+    let _displayName = e.target.name.value
     let _email = e.target.email.value
     let _password = e.target.password.value
-    firebaseSignUpWithEmailAndPassword(_email, _password)
+    firebaseSignUpWithEmailAndPassword(_email, _password, _displayName)
   }
 
   return (
@@ -37,10 +38,18 @@ function Signup() {
           <Heading size='lg' color='teal' mb={4}>
             Cadastro de usuário
           </Heading>
-          <FormControl mb='2'>
-            {/* <FormLabel htmlFor='email' mb={0}>
-                Username
-              </FormLabel> */}
+          <FormControl mb='2' isInvalid={error}>
+            {error && (
+              <FormErrorMessage pb={2}>{error.message}</FormErrorMessage>
+            )}
+            <Input
+              id='name'
+              variant='flushed'
+              type='text'
+              placeholder='Nome'></Input>
+          </FormControl>
+          <FormControl mb='2'></FormControl>
+          <FormControl mb='2' isInvalid={error}>
             <Input
               id='email'
               variant='flushed'
@@ -48,9 +57,6 @@ function Signup() {
               placeholder='Email'></Input>
           </FormControl>
           <FormControl mb='2'>
-            {/* <FormLabel htmlFor='password' mb={0}>
-                Password
-              </FormLabel> */}
             <Input
               id='password'
               variant='flushed'

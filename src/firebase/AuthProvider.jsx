@@ -1,4 +1,4 @@
-import { createContext, useContext, Context, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { app, db, auth } from './firebase-config'
 import {
@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from 'firebase/auth'
 
 const AuthContext = createContext()
@@ -17,25 +18,31 @@ function AuthProvider({ children }) {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user)
-    }
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user)
+      }
+    })
     setLoading(false)
-    setError(null)
-  })
+  }, [user])
 
-  const firebaseSignUpWithEmailAndPassword = async (_email, _password) => {
+  const firebaseSignUpWithEmailAndPassword = async (
+    _email,
+    _password,
+    _displayName
+  ) => {
     setLoading(true)
     setError(null)
     try {
-      const userCredentials = await createUserWithEmailAndPassword(
-        auth,
-        _email,
-        _password
-      )
-      setUser(userCredentials.user)
+      const user = await createUserWithEmailAndPassword(auth, _email, _password)
+      const result = await updateProfile(auth.currentUser, {
+        displayName: _displayName,
+      })
+      console.log(result)
+      setUser(user)
       setError(null)
+      console.log('recebaaa')
       router.push('/dashboard')
     } catch (error) {
       setError(error)
@@ -48,12 +55,8 @@ function AuthProvider({ children }) {
     try {
       setLoading(true)
       setError(null)
-      const userCredentials = await signInWithEmailAndPassword(
-        auth,
-        _email,
-        _password
-      )
-      setUser(userCredentials.user)
+      const user = await signInWithEmailAndPassword(auth, _email, _password)
+      setUser(user)
       setError(null)
       router.push('/dashboard')
     } catch (error) {
