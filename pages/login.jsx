@@ -9,9 +9,22 @@ import {
   HStack,
   Text,
 } from '@chakra-ui/react'
-import Link from '../components/Link'
+import Link from '../src/components/Link'
+import { useRouter } from 'next/router'
+import { useAuth } from '../src/firebase/AuthProvider'
 
 function Login() {
+  const router = useRouter()
+  const { firebaseSignInWithEmailAndPassword, error } = useAuth()
+
+  function handleLogin(e) {
+    e.preventDefault()
+    let _email = e.target.email.value
+    let _password = e.target.password.value
+
+    firebaseSignInWithEmailAndPassword(_email, _password)
+  }
+
   return (
     <Flex w='100vw' h='100vh' bg='gray.50' alignItems='center' justify='center'>
       <VStack
@@ -21,21 +34,20 @@ function Login() {
         shadow='lg'
         minW='400px'
         bg='white'>
-        <form
-          style={{ width: '100%', padding: '10%' }}
-          onSubmit={() => alert('Joyce Vadia')}>
-          <Heading size='lg' color='teal' mb={2}>
-            Bem vindo ao estoque
+        <form style={{ width: '100%', padding: '10%' }} onSubmit={handleLogin}>
+          <Heading size='lg' color='teal' mb={4}>
+            Controle de estoque
           </Heading>
+          {error && error.message}
           <FormControl mb='2'>
-            {/* <FormLabel htmlFor='username' mb={0}>
+            {/* <FormLabel htmlFor='email' mb={0}>
               Username
             </FormLabel> */}
             <Input
-              id='username'
+              id='email'
               variant='flushed'
               type='text'
-              placeholder='Username'></Input>
+              placeholder='email'></Input>
           </FormControl>
           <FormControl mb='2'>
             {/* <FormLabel htmlFor='password' mb={0}>
@@ -47,7 +59,7 @@ function Login() {
               type='password'
               placeholder='Password'></Input>
           </FormControl>
-          <Button colorScheme='teal' w='full' my='6'>
+          <Button colorScheme='teal' w='full' my='6' type='submit'>
             Login
           </Button>
           <Text fontSize='md' color='gray.600'>
