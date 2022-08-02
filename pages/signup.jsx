@@ -38,7 +38,7 @@ function Signup() {
           <Heading size='lg' color='teal' mb={4}>
             Cadastro de usuário
           </Heading>
-          <FormControl mb='2' isInvalid={error}>
+          <FormControl mb='2' isInvalid={error} isRequired>
             {error && (
               <FormErrorMessage pb={2}>{error.message}</FormErrorMessage>
             )}
@@ -48,15 +48,14 @@ function Signup() {
               type='text'
               placeholder='Nome'></Input>
           </FormControl>
-          <FormControl mb='2'></FormControl>
-          <FormControl mb='2' isInvalid={error}>
+          <FormControl mb='2' isInvalid={error} isRequired>
             <Input
               id='email'
               variant='flushed'
               type='text'
               placeholder='Email'></Input>
           </FormControl>
-          <FormControl mb='2'>
+          <FormControl mb='2' isRequired>
             <Input
               id='password'
               variant='flushed'

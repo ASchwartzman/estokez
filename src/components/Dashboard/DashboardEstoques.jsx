@@ -1,13 +1,26 @@
 import { useState } from 'react'
-import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, VStack, useDisclosure } from '@chakra-ui/react'
+import { MdSearch, MdAdd } from 'react-icons/md'
 import { SearchBar } from './SearchBar'
 import { TabelaEstoque } from './TabelaEstoque'
-import { MdSearch, MdAdd } from 'react-icons/md'
 import { items as allItems } from '../../dados/items'
+import ModalNovoItem from './ModalNovoItem'
 
 export function DashboardEstoques() {
+  //modal novo item hooks
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [newItem, setNewItem] = useState({
+    produto: null,
+    caixa: null,
+    estoqueMin: 0,
+    peso: 0,
+    quantidade: 0,
+  })
+
+  //mock data
   const [items, setItems] = useState(allItems)
 
+  //configura searchbar
   function onChangeSearchBar(e) {
     let strLowerCase = e.target.value.toLowerCase()
 
@@ -30,6 +43,7 @@ export function DashboardEstoques() {
           leftIcon={MdSearch}
         />
         <Button
+          onClick={onOpen}
           leftIcon={<Icon as={MdAdd} />}
           variant='solid'
           colorScheme='teal'>
@@ -37,6 +51,13 @@ export function DashboardEstoques() {
         </Button>
       </HStack>
       <TabelaEstoque items={items} />
+      <ModalNovoItem
+        onSubmit={() => alert(JSON.stringify(newItem))}
+        isOpen={isOpen}
+        onClose={onClose}
+        newItem={newItem}
+        setNewItem={setNewItem}
+      />
     </VStack>
   )
 }
