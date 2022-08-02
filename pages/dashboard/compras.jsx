@@ -5,7 +5,7 @@ function Compras() {
   return (
     <DashboardLayout>
       <Flex w='full' alignItems='center' justifyContent='center'>
-        Controle de Compras
+        Construir Controle de Compras
       </Flex>
     </DashboardLayout>
   )

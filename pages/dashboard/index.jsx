@@ -7,8 +7,16 @@ function DashboardUser() {
 
   return (
     <DashboardLayout>
-      <Flex w='full' h='full' alignItems='center' justifyContent='center'>
+      <Flex
+        textAlign='center'
+        w='full'
+        h='full'
+        alignItems='center'
+        justifyContent='center'>
         {loading ? 'Loading...' : user?.email}
+        <br />
+        <br />
+        Construir página de usuário
       </Flex>
     </DashboardLayout>
   )

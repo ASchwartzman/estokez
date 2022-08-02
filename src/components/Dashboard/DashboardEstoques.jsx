@@ -1,12 +1,25 @@
 import { useState } from 'react'
-import { Button, HStack, Icon, VStack, useDisclosure } from '@chakra-ui/react'
+import {
+  Show,
+  Button,
+  HStack,
+  Icon,
+  VStack,
+  useDisclosure,
+  Box,
+  useToast,
+} from '@chakra-ui/react'
 import { MdSearch, MdAdd } from 'react-icons/md'
 import { SearchBar } from './SearchBar'
 import { TabelaEstoque } from './TabelaEstoque'
 import { items as allItems } from '../../dados/items'
 import ModalNovoItem from './ModalNovoItem'
+import { addEstoqueItem } from '../../firebase/firestore'
 
 export function DashboardEstoques() {
+  //Toast
+  const toast = useToast()
+
   //modal novo item hooks
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [newItem, setNewItem] = useState({
@@ -16,6 +29,18 @@ export function DashboardEstoques() {
     peso: 0,
     quantidade: 0,
   })
+
+  //reset new item on close modal
+  function onCloseModal() {
+    setNewItem({
+      produto: null,
+      caixa: null,
+      estoqueMin: 0,
+      peso: 0,
+      quantidade: 0,
+    })
+    onClose()
+  }
 
   //mock data
   const [items, setItems] = useState(allItems)
@@ -32,29 +57,49 @@ export function DashboardEstoques() {
     setItems(selectedItems)
   }
 
+  //add new item to firestore
+  async function handleNewItem(e) {
+    e.preventDefault()
+    let docRef = await addEstoqueItem(newItem)
+    onCloseModal()
+    console.log(docRef)
+    if (docRef.id) {
+      toast({
+        title: `Great!`,
+        description: 'Item adicionado com sucesso',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  }
+
   return (
     <VStack px='2.5%' pt={4} w='full' alignItems='start'>
-      <HStack w='full'>
+      <HStack w='full' justifyContent='space-between'>
         <SearchBar
-          w='50vw'
+          w='full'
           minW='300px'
-          maxW='600px'
+          // maxW='600px'
           handleChange={onChangeSearchBar}
           leftIcon={MdSearch}
         />
         <Button
           onClick={onOpen}
           leftIcon={<Icon as={MdAdd} />}
+          iconSpacing={{ md: '0.5', sm: '0' }}
           variant='solid'
           colorScheme='teal'>
-          Novo Item
+          <Show above='md'>
+            <Box>Novo Item</Box>
+          </Show>
         </Button>
       </HStack>
       <TabelaEstoque items={items} />
       <ModalNovoItem
-        onSubmit={() => alert(JSON.stringify(newItem))}
+        onSubmit={(e) => handleNewItem(e)}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={onCloseModal}
         newItem={newItem}
         setNewItem={setNewItem}
       />

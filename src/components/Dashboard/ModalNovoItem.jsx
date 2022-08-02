@@ -46,7 +46,6 @@ function ModalNovoItem({ isOpen, onClose, newItem, onSubmit, setNewItem }) {
             type='number'
             placeholder='Unidades'
             id='quantidade'
-            value={newItem.quantidade}
             onChange={(e) =>
               setNewItem({ ...newItem, quantidade: e.target.value })
             }
@@ -58,7 +57,6 @@ function ModalNovoItem({ isOpen, onClose, newItem, onSubmit, setNewItem }) {
             type='number'
             placeholder='kg'
             id='peso'
-            value={newItem.peso}
             onChange={(e) => setNewItem({ ...newItem, peso: e.target.value })}
           />
         </FormControl>
