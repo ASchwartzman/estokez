@@ -1,4 +1,4 @@
-import { collection, addDoc, onSnapshot } from 'firebase/firestore'
+import { collection, addDoc, doc, deleteDoc, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { db } from './firebase-config'
 
 export async function addEstoqueItem(newItem) {
@@ -14,8 +14,8 @@ export async function addEstoqueItem(newItem) {
 export function getItemsEstoque(setAllItems, setItems) {
   try {
     let estoqueCollectionRef = collection(db, 'estoque')
-
-    let unsubscribe = onSnapshot(estoqueCollectionRef, (snapshot) => {
+    let q = query(estoqueCollectionRef, orderBy('caixa', 'asc'))
+    let unsubscribe = onSnapshot(q, (snapshot) => {
       let data = []
       snapshot.docs.map((doc) => {
         let item = doc.data()
@@ -27,5 +27,22 @@ export function getItemsEstoque(setAllItems, setItems) {
     })
 
     return unsubscribe
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function removeEstoqueItem(id) {
+  try {
+    // let estoqueCollectionRef = collection(db, 'estoque')
+    let docRef = doc(db, 'estoque', id)
+    let result = await deleteDoc(docRef)
+
+    return result
+
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+
 }
