@@ -10,7 +10,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { MdSearch, MdAdd } from 'react-icons/md'
-import { onSnapshot } from 'firebase/firestore'
 import { SearchBar } from './SearchBar'
 import { TabelaEstoque } from './TabelaEstoque'
 import ModalNovoItem from './ModalNovoItem'
@@ -61,8 +60,6 @@ export function DashboardEstoques() {
         item.produto.toLocaleLowerCase().includes(strLowerCase) ||
         item.caixa == strLowerCase
     )
-
-    console.log(strLowerCase, selectedItems)
     setItems(selectedItems)
   }
 
