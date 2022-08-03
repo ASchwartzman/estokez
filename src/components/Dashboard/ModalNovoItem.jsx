@@ -24,7 +24,7 @@ function ModalNovoItem({ isOpen, onClose, newItem, onSubmit, setNewItem }) {
             type='number'
             placeholder='Número Caixa'
             id='caixa'
-            onChange={(e) => setNewItem({ ...newItem, caixa: e.target.value })}
+            onChange={(e) => setNewItem({ ...newItem, caixa: parseInt(e.target.value) })}
           />
         </FormControl>
         <FormControl>
@@ -34,7 +34,7 @@ function ModalNovoItem({ isOpen, onClose, newItem, onSubmit, setNewItem }) {
             placeholder='Unidades'
             id='estoqueMin'
             onChange={(e) =>
-              setNewItem({ ...newItem, estoqueMin: e.target.value })
+              setNewItem({ ...newItem, estoqueMin: parseInt(e.target.value) })
             }
           />
         </FormControl>
@@ -47,7 +47,7 @@ function ModalNovoItem({ isOpen, onClose, newItem, onSubmit, setNewItem }) {
             placeholder='Unidades'
             id='quantidade'
             onChange={(e) =>
-              setNewItem({ ...newItem, quantidade: e.target.value })
+              setNewItem({ ...newItem, quantidade: parseInt(e.target.value) })
             }
           />
         </FormControl>
@@ -57,7 +57,7 @@ function ModalNovoItem({ isOpen, onClose, newItem, onSubmit, setNewItem }) {
             type='number'
             placeholder='kg'
             id='peso'
-            onChange={(e) => setNewItem({ ...newItem, peso: e.target.value })}
+            onChange={(e) => setNewItem({ ...newItem, peso: parseFloat(e.target.value) })}
           />
         </FormControl>
       </HStack>
