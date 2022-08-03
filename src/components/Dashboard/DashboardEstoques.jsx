@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Show,
   Button,
@@ -10,11 +10,11 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { MdSearch, MdAdd } from 'react-icons/md'
+import { onSnapshot } from 'firebase/firestore'
 import { SearchBar } from './SearchBar'
 import { TabelaEstoque } from './TabelaEstoque'
-import { items as allItems } from '../../dados/items'
 import ModalNovoItem from './ModalNovoItem'
-import { addEstoqueItem } from '../../firebase/firestore'
+import { getItemsEstoque, addEstoqueItem } from '../../firebase/firestore'
 
 export function DashboardEstoques() {
   //Toast
@@ -30,6 +30,16 @@ export function DashboardEstoques() {
     quantidade: 0,
   })
 
+  //mock data
+  const [items, setItems] = useState([])
+  const [allItems, setAllItems] = useState([])
+
+  useEffect(() => {
+    let unsubscribe = getItemsEstoque(setAllItems, setItems)
+
+    return () => unsubscribe()
+  }, [])
+
   //reset new item on close modal
   function onCloseModal() {
     setNewItem({
@@ -42,15 +52,14 @@ export function DashboardEstoques() {
     onClose()
   }
 
-  //mock data
-  const [items, setItems] = useState(allItems)
-
   //configura searchbar
   function onChangeSearchBar(e) {
     let strLowerCase = e.target.value.toLowerCase()
 
-    let selectedItems = allItems.filter((item) =>
-      item.name.toLocaleLowerCase().includes(strLowerCase)
+    let selectedItems = allItems.filter(
+      (item) =>
+        item.produto.toLocaleLowerCase().includes(strLowerCase) ||
+        item.caixa == strLowerCase
     )
 
     console.log(strLowerCase, selectedItems)
@@ -68,7 +77,7 @@ export function DashboardEstoques() {
         title: `Great!`,
         description: 'Item adicionado com sucesso',
         status: 'success',
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       })
     }

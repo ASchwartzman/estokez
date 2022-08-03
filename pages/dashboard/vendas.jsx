@@ -1,5 +1,6 @@
 import { Button, Flex, useToast } from '@chakra-ui/react'
 import DashboardLayout from '../../src/components/Layouts/DashboardLayout'
+import { getItemsEstoque } from '../../src/firebase/firestore'
 
 function Vendas() {
   const toast = useToast()
@@ -7,18 +8,7 @@ function Vendas() {
     <DashboardLayout>
       <Flex w='full' alignItems='center' justifyContent='center'>
         {/* Construir Controle de Vendas */}
-        <Button
-          onClick={() => {
-            toast({
-              title: 'Account created.',
-              description: "We've created your account for you.",
-              status: 'success',
-              duration: 9000,
-              isClosable: true,
-            })
-          }}>
-          Click me
-        </Button>
+        <Button onClick={() => {}}>Click me</Button>
       </Flex>
     </DashboardLayout>
   )

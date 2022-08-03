@@ -1,5 +1,4 @@
-import { Toast } from '@chakra-ui/react'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, onSnapshot } from 'firebase/firestore'
 import { db } from './firebase-config'
 
 export async function addEstoqueItem(newItem) {
@@ -8,7 +7,25 @@ export async function addEstoqueItem(newItem) {
     let result = await addDoc(estoqueCollectionRef, newItem)
     return result
   } catch (error) {
-    // console.log(error)
     return error
   }
+}
+
+export function getItemsEstoque(setAllItems, setItems) {
+  try {
+    let estoqueCollectionRef = collection(db, 'estoque')
+
+    let unsubscribe = onSnapshot(estoqueCollectionRef, (snapshot) => {
+      let data = []
+      snapshot.docs.map((doc) => {
+        let item = doc.data()
+        let id = doc.id
+        data.push({ id: id, ...item })
+      })
+      setAllItems(data)
+      setItems(data)
+    })
+
+    return unsubscribe
+  } catch (error) {}
 }

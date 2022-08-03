@@ -13,13 +13,15 @@ function SideBarItem(props) {
         borderEndColor={isActive ? 'teal.800' : 'null'}
         fontWeight={isActive ? 'bold' : 'null'}
         color={isActive ? 'gray.50' : 'gray.600'}
-        _hover={
+        sx={
           isActive
             ? 'null'
             : {
-                bg: 'gray.200',
-                borderEnd: '2px',
-                borderEndColor: 'teal.800',
+                _hover: {
+                  bg: 'gray.200',
+                  borderEnd: '2px',
+                  borderEndColor: 'teal.800',
+                },
               }
         }
         p={3}

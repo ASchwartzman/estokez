@@ -9,7 +9,7 @@ export function SearchBar({ leftIcon, handleChange, ...otherProps }) {
         children={<Icon as={leftIcon} />}
       />
       <Input
-        placeholder='Buscar items...'
+        placeholder='Busca por produto OU caixa'
         variant='filled'
         focusBorderColor='gray.400'
         onChange={(e) => handleChange(e)}

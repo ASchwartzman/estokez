@@ -36,12 +36,12 @@ const TableItem = ({ item }) => {
       color={'gray.600'}
       _hover={{ backgroundColor: 'gray.50' }}>
       <Td>{item.id}</Td>
-      <Td>{item.name}</Td>
+      <Td>{item.produto}</Td>
       <Td fontWeight='bold' isNumeric>
-        {item.qtd}
+        {item.quantidade}
       </Td>
       <Td isNumeric>{item.caixa}</Td>
-      <Td isNumeric>{item.qtdMin}</Td>
+      <Td isNumeric>{item.estoqueMin}</Td>
       <Td>
         <HStack>
           <Tooltip label='Editar'>
