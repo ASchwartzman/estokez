@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   FormControl,
   FormLabel,
@@ -7,30 +7,40 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import Modal from '../Modal'
-import { addEstoqueItem } from '../../firebase/firestore'
+import { updateItem } from '../../firebase/firestore'
 
-function ModalNovoItem({ isOpen, onClose }) {
+function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
   //Toast
   const toast = useToast()
 
-  const [newItem, setNewItem] = useState({
-    produto: null,
-    caixa: null,
-    estoqueMin: 0,
-    peso: 0,
-    quantidade: 0,
+  const [editItem, setEditItem] = useState({
+    produto: item.produto,
+    caixa: item.caixa,
+    estoqueMin: item.estoqueMin,
+    peso: item.peso,
+    quantidade: item.quantidade,
   })
 
+  useEffect(() => {
+    setEditItem({
+      produto: item.produto,
+      caixa: item.caixa,
+      estoqueMin: item.estoqueMin,
+      peso: item.peso,
+      quantidade: item.quantidade,
+    })
+  }, [isOpen])
+
   //add new item to firestore
-  async function handleNewItem(e) {
+  async function handleItem(e) {
     e.preventDefault()
-    let docRef = await addEstoqueItem(newItem)
+    let result = await updateItem(item.id, editItem)
     onCloseModal()
-    console.log(docRef)
-    if (docRef.id) {
+
+    if (result) {
       toast({
         title: ``,
-        description: 'Item adicionado :)',
+        description: 'Item atualizado ;)',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -40,7 +50,7 @@ function ModalNovoItem({ isOpen, onClose }) {
 
   //reset new item on close modal
   function onCloseModal() {
-    setNewItem({
+    setEditItem({
       produto: null,
       caixa: null,
       estoqueMin: 0,
@@ -48,21 +58,25 @@ function ModalNovoItem({ isOpen, onClose }) {
       quantidade: 0,
     })
     onClose()
+    setSelectedItem({})
   }
 
   return (
     <Modal
-      submitButtonTitle='Criar Item'
-      title={'NOVO ITEM'}
+      submitButtonTitle='Alterar Item'
+      title={'ALTERAR ITEM'}
       isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={(e) => handleNewItem(e)}>
+      onClose={onCloseModal}
+      onSubmit={(e) => handleItem(e)}>
       <FormControl mb={2}>
         <FormLabel htmlFor='produto'>Produto</FormLabel>
         <Input
           id='produto'
           placeholder='Nome'
-          onChange={(e) => setNewItem({ ...newItem, produto: e.target.value })}
+          value={editItem.produto}
+          onChange={(e) =>
+            setEditItem({ ...editItem, produto: e.target.value })
+          }
         />
       </FormControl>
       <HStack mb={2}>
@@ -72,8 +86,9 @@ function ModalNovoItem({ isOpen, onClose }) {
             type='number'
             placeholder='Número Caixa'
             id='caixa'
+            value={editItem.caixa}
             onChange={(e) =>
-              setNewItem({ ...newItem, caixa: parseInt(e.target.value) })
+              setEditItem({ ...editItem, caixa: parseInt(e.target.value) })
             }
           />
         </FormControl>
@@ -83,21 +98,23 @@ function ModalNovoItem({ isOpen, onClose }) {
             type='number'
             placeholder='Unidades'
             id='estoqueMin'
+            value={editItem.estoqueMin}
             onChange={(e) =>
-              setNewItem({ ...newItem, estoqueMin: parseInt(e.target.value) })
+              setEditItem({ ...editItem, estoqueMin: parseInt(e.target.value) })
             }
           />
         </FormControl>
       </HStack>
       <HStack>
         <FormControl>
-          <FormLabel htmlFor='quantidade'>Estoque Inicial</FormLabel>
+          <FormLabel htmlFor='quantidade'>Estoque</FormLabel>
           <Input
             type='number'
             placeholder='Unidades'
             id='quantidade'
+            value={editItem.quantidade}
             onChange={(e) =>
-              setNewItem({ ...newItem, quantidade: parseInt(e.target.value) })
+              setEditItem({ ...editItem, quantidade: parseInt(e.target.value) })
             }
           />
         </FormControl>
@@ -107,8 +124,9 @@ function ModalNovoItem({ isOpen, onClose }) {
             type='number'
             placeholder='kg'
             id='peso'
+            value={editItem.peso}
             onChange={(e) =>
-              setNewItem({ ...newItem, peso: parseFloat(e.target.value) })
+              setEditItem({ ...editItem, peso: parseFloat(e.target.value) })
             }
           />
         </FormControl>
@@ -117,4 +135,4 @@ function ModalNovoItem({ isOpen, onClose }) {
   )
 }
 
-export default ModalNovoItem
+export default ModalUpdateItem

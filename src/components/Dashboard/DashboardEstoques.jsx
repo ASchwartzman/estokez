@@ -7,27 +7,16 @@ import {
   VStack,
   useDisclosure,
   Box,
-  useToast,
 } from '@chakra-ui/react'
 import { MdSearch, MdAdd } from 'react-icons/md'
 import { SearchBar } from './SearchBar'
 import { TabelaEstoque } from './TabelaEstoque'
 import ModalNovoItem from './ModalNovoItem'
-import { getItemsEstoque, addEstoqueItem } from '../../firebase/firestore'
+import { getItemsEstoque } from '../../firebase/firestore'
 
 export function DashboardEstoques() {
-  //Toast
-  const toast = useToast()
-
-  //modal novo item hooks
+  //Modal Control
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [newItem, setNewItem] = useState({
-    produto: null,
-    caixa: null,
-    estoqueMin: 0,
-    peso: 0,
-    quantidade: 0,
-  })
 
   //mock data
   const [items, setItems] = useState([])
@@ -39,19 +28,7 @@ export function DashboardEstoques() {
     return () => unsubscribe()
   }, [])
 
-  //reset new item on close modal
-  function onCloseModal() {
-    setNewItem({
-      produto: null,
-      caixa: null,
-      estoqueMin: 0,
-      peso: 0,
-      quantidade: 0,
-    })
-    onClose()
-  }
-
-  //configura searchbar
+  //config searchbar
   function onChangeSearchBar(e) {
     let strLowerCase = e.target.value.toLowerCase()
 
@@ -61,23 +38,6 @@ export function DashboardEstoques() {
         item.caixa == strLowerCase
     )
     setItems(selectedItems)
-  }
-
-  //add new item to firestore
-  async function handleNewItem(e) {
-    e.preventDefault()
-    let docRef = await addEstoqueItem(newItem)
-    onCloseModal()
-    console.log(docRef)
-    if (docRef.id) {
-      toast({
-        title: `Great!`,
-        description: 'Item adicionado com sucesso',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
   }
 
   return (
@@ -102,13 +62,7 @@ export function DashboardEstoques() {
         </Button>
       </HStack>
       <TabelaEstoque items={items} />
-      <ModalNovoItem
-        onSubmit={(e) => handleNewItem(e)}
-        isOpen={isOpen}
-        onClose={onCloseModal}
-        newItem={newItem}
-        setNewItem={setNewItem}
-      />
+      <ModalNovoItem isOpen={isOpen} onClose={onClose} />
     </VStack>
   )
 }

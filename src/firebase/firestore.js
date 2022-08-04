@@ -1,15 +1,14 @@
-import { collection, addDoc, doc, deleteDoc, onSnapshot, query, orderBy } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  setDoc,
+} from 'firebase/firestore'
 import { db } from './firebase-config'
-
-export async function addEstoqueItem(newItem) {
-  try {
-    let estoqueCollectionRef = collection(db, 'estoque')
-    let result = await addDoc(estoqueCollectionRef, newItem)
-    return result
-  } catch (error) {
-    return error
-  }
-}
 
 export function getItemsEstoque(setAllItems, setItems) {
   try {
@@ -32,17 +31,37 @@ export function getItemsEstoque(setAllItems, setItems) {
   }
 }
 
+export async function addEstoqueItem(newItem) {
+  try {
+    let estoqueCollectionRef = collection(db, 'estoque')
+    let result = await addDoc(estoqueCollectionRef, newItem)
+    return result
+  } catch (error) {
+    return null
+  }
+}
+
 export async function removeEstoqueItem(id) {
   try {
     // let estoqueCollectionRef = collection(db, 'estoque')
     let docRef = doc(db, 'estoque', id)
-    let result = await deleteDoc(docRef)
+    await deleteDoc(docRef)
 
-    return result
-
+    return true
   } catch (error) {
     console.log(error)
     return null
   }
+}
 
+export async function updateItem(id, item) {
+  try {
+    let docRef = doc(db, 'estoque', id)
+    await setDoc(docRef, item)
+
+    return true
+  } catch (error) {
+    console.log(error)
+    return null
+  }
 }

@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react'
 import {
-  TableContainer,
+  useDisclosure,
   Table,
   TableCaption,
   Thead,
@@ -11,9 +12,11 @@ import {
   HStack,
   Text,
   Tooltip,
+  useToast,
 } from '@chakra-ui/react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import { removeEstoqueItem } from '../../firebase/firestore'
+import ModalUpdateItem from './ModalUpdateItem'
 
 const TableHead = () => {
   return (
@@ -21,7 +24,7 @@ const TableHead = () => {
       <Tr>
         <Th>Produto</Th>
         <Th textAlign='center'>Caixa</Th>
-        <Th isNumeric>{"Peso (kg)"}</Th>
+        <Th isNumeric>{'Peso (kg)'}</Th>
         <Th isNumeric>Quantidade</Th>
         <Th isNumeric>Estoque Mín</Th>
         <Th></Th>
@@ -30,49 +33,105 @@ const TableHead = () => {
   )
 }
 
-const TableItem = ({ item }) => {
-
-
+const TableItem = ({ item, onOpen, setSelectedItem }) => {
+  const toast = useToast()
   return (
-    <Tr
-      fontSize='md'
-      color={'gray.600'}
-      _hover={{ backgroundColor: 'gray.50' }}>
-      <Td>{item.produto}</Td>
-      <Td borderColor='gray.200' borderRadius='lg' fontWeight='extrabold' bg='gray.100' textAlign='center' >{item.caixa}</Td>
-      <Td isNumeric>{item.peso}</Td>
-      <Td fontWeight='bold' isNumeric>
-        {item.quantidade}
-      </Td>
-      <Td isNumeric>{item.estoqueMin}</Td>
-      <Td>
-        <HStack>
-          <Tooltip label='Editar'>
-            <IconButton color='teal' variant='ghost' icon={<EditIcon />} />
-          </Tooltip>
-          <Tooltip label='Excluir'>
-            <IconButton color='red' variant='ghost' icon={<DeleteIcon />} onClick={() => removeEstoqueItem(item.id)} />
-          </Tooltip>
-        </HStack>
-      </Td>
-    </Tr>
+    <>
+      <Tr
+        fontSize='md'
+        color={'gray.600'}
+        _hover={{ backgroundColor: 'gray.50' }}>
+        <Td>{item.produto}</Td>
+        <Td
+          borderColor='gray.200'
+          borderRadius='lg'
+          fontWeight='extrabold'
+          bg='gray.100'
+          textAlign='center'>
+          {item.caixa}
+        </Td>
+        <Td isNumeric>{item.peso}</Td>
+        <Td fontWeight='bold' isNumeric>
+          {item.quantidade}
+        </Td>
+        <Td isNumeric>{item.estoqueMin}</Td>
+        <Td>
+          <HStack>
+            <Tooltip label='Editar'>
+              <IconButton
+                color='teal'
+                variant='ghost'
+                icon={<EditIcon />}
+                onClick={() => {
+                  setSelectedItem(item)
+                  onOpen()
+                }}
+              />
+            </Tooltip>
+            <Tooltip label='Excluir'>
+              <IconButton
+                color='red'
+                variant='ghost'
+                icon={<DeleteIcon />}
+                onClick={() => {
+                  let result = removeEstoqueItem(item.id)
+                  if (result) {
+                    toast({
+                      title: ``,
+                      description: 'Item removido :/',
+                      status: 'error',
+                      duration: 3000,
+                      isClosable: true,
+                    })
+                  }
+                }}
+              />
+            </Tooltip>
+          </HStack>
+        </Td>
+      </Tr>
+    </>
   )
 }
 
 export function TabelaEstoque({ items, ...otherProps }) {
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const [selectedItem, setSelectedItem] = useState({
+    produto: '',
+    caixa: '',
+    estoqueMin: 0,
+    peso: 0,
+    quantidade: 0,
+  })
 
   return (
-    <Table variant='simple' w='100%'>
-      <TableCaption placement='top'>
-        <HStack justifyContent='space-between'>
-          <Text fontSize={16}>Estoque</Text>
-          <Text>{new Date().toLocaleDateString('pt-br')}</Text>
-        </HStack>
-      </TableCaption>
-      <TableHead />
-      <Tbody>
-        {items && items.map((item) => <TableItem key={item.id} item={item} />)}
-      </Tbody>
-    </Table>
+    <>
+      <Table variant='simple' w='100%'>
+        <TableCaption placement='top'>
+          <HStack justifyContent='space-between'>
+            <Text fontSize={16}>Estoque</Text>
+            <Text>{new Date().toLocaleDateString('pt-br')}</Text>
+          </HStack>
+        </TableCaption>
+        <TableHead />
+        <Tbody>
+          {items &&
+            items.map((item) => (
+              <TableItem
+                key={item.id}
+                item={item}
+                onOpen={onOpen}
+                setSelectedItem={setSelectedItem}
+              />
+            ))}
+        </Tbody>
+      </Table>
+      <ModalUpdateItem
+        isOpen={isOpen}
+        onClose={onClose}
+        item={selectedItem}
+        setSelectedItem={(item) => setSelectedItem(item)}
+      />
+    </>
   )
 }
