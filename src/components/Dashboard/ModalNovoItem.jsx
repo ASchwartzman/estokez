@@ -52,7 +52,7 @@ function ModalNovoItem({ isOpen, onClose }) {
 
   return (
     <Modal
-      submitButtonTitle='Criar Item'
+      submitButtonTitle='Criar'
       title={'NOVO ITEM'}
       isOpen={isOpen}
       onClose={onClose}

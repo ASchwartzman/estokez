@@ -63,7 +63,7 @@ function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
 
   return (
     <Modal
-      submitButtonTitle='Alterar Item'
+      submitButtonTitle='Alterar'
       title={'ALTERAR ITEM'}
       isOpen={isOpen}
       onClose={onCloseModal}
