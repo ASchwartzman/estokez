@@ -28,7 +28,7 @@ function Modal({
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
           <ModalFooter alignItems='center'>
-            <Button colorScheme='teal' w='50%' onClick={onSubmit}>
+            <Button colorScheme='teal' w='100%' onClick={onSubmit}>
               {submitButtonTitle}
             </Button>
             {/* <Button variant='ghost'>Secondary Action</Button> */}
