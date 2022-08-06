@@ -88,7 +88,7 @@ function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
             id='caixa'
             value={editItem.caixa}
             onChange={(e) =>
-              setEditItem({ ...editItem, caixa: parseInt(e.target.value) })
+              setEditItem({ ...editItem, caixa: parseInt(e.target.value) || 0 })
             }
           />
         </FormControl>
@@ -100,7 +100,10 @@ function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
             id='estoqueMin'
             value={editItem.estoqueMin}
             onChange={(e) =>
-              setEditItem({ ...editItem, estoqueMin: parseInt(e.target.value) })
+              setEditItem({
+                ...editItem,
+                estoqueMin: parseInt(e.target.value) || 0,
+              })
             }
           />
         </FormControl>
@@ -114,7 +117,10 @@ function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
             id='quantidade'
             value={editItem.quantidade}
             onChange={(e) =>
-              setEditItem({ ...editItem, quantidade: parseInt(e.target.value) })
+              setEditItem({
+                ...editItem,
+                quantidade: parseInt(e.target.value) || 0,
+              })
             }
           />
         </FormControl>
@@ -126,7 +132,10 @@ function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
             id='peso'
             value={editItem.peso}
             onChange={(e) =>
-              setEditItem({ ...editItem, peso: parseFloat(e.target.value) })
+              setEditItem({
+                ...editItem,
+                peso: parseFloat(e.target.value) || 0,
+              })
             }
           />
         </FormControl>
