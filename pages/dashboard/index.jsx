@@ -1,6 +1,7 @@
 import DashboardLayout from '../../src/components/Layouts/DashboardLayout'
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import { useAuth } from '../../src/firebase/AuthProvider'
+import { withProtected } from '../../src/firebase/routesWrappers'
 
 function DashboardUser() {
   const { user, loading } = useAuth()
@@ -22,4 +23,4 @@ function DashboardUser() {
   )
 }
 
-export default DashboardUser
+export default withProtected(DashboardUser)

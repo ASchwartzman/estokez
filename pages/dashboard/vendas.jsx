@@ -1,6 +1,6 @@
 import { Button, Flex, useToast } from '@chakra-ui/react'
 import DashboardLayout from '../../src/components/Layouts/DashboardLayout'
-import { getItemsEstoque } from '../../src/firebase/firestore'
+import { withProtected } from '../../src/firebase/routesWrappers'
 
 function Vendas() {
   const toast = useToast()
@@ -14,4 +14,4 @@ function Vendas() {
   )
 }
 
-export default Vendas
+export default withProtected(Vendas)

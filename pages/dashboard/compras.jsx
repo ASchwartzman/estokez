@@ -1,4 +1,5 @@
-import { Center, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
+import { withProtected } from '../../src/firebase/routesWrappers'
 import DashboardLayout from '../../src/components/Layouts/DashboardLayout'
 
 function Compras() {
@@ -11,4 +12,4 @@ function Compras() {
   )
 }
 
-export default Compras
+export default withProtected(Compras)

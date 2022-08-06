@@ -1,17 +1,15 @@
 import {
   Flex,
   FormControl,
-  FormLabel,
   Heading,
   Input,
   VStack,
   Button,
-  HStack,
   Text,
   FormErrorMessage,
 } from '@chakra-ui/react'
 import Link from '../src/components/Link'
-import { useRouter } from 'next/router'
+import { withPublic } from '../src/firebase/routesWrappers'
 import { useAuth } from '../src/firebase/AuthProvider'
 
 function Login() {
@@ -76,4 +74,4 @@ function Login() {
   )
 }
 
-export default Login
+export default withPublic(Login)
