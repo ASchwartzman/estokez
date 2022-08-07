@@ -12,7 +12,7 @@ export function withPublic(Component) {
       if (auth.user) {
         router.replace('/dashboard')
       }
-    }, [])
+    }, [auth, router])
 
     // if (auth.user) {
     //   return (
@@ -33,7 +33,7 @@ export function withProtected(Component) {
       if (!auth.user) {
         router.push('/login')
       }
-    }, [])
+    }, [auth, router])
 
     if (!auth.user) {
       return <h1>No user authenticated, redirecting to login page...</h1>
