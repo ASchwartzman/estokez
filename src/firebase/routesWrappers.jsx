@@ -14,11 +14,11 @@ export function withPublic(Component) {
       }
     }, [])
 
-    if (auth.user) {
-      return (
-        <h1>{`${auth.user.displayName} is logged in, redirecting to dashboard...`}</h1>
-      )
-    }
+    // if (auth.user) {
+    //   return (
+    //     <h1>{`${auth.user.displayName} is logged in, redirecting to dashboard...`}</h1>
+    //   )
+    // }
 
     return <Component />
   }

@@ -13,8 +13,9 @@ import {
   Text,
   Tooltip,
   useToast,
+  VStack,
 } from '@chakra-ui/react'
-import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
+import { AddIcon, MinusIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import { removeEstoqueItem } from '../../firebase/firestore'
 import ModalUpdateItem from './ModalUpdateItem'
 
@@ -56,38 +57,76 @@ const TableItem = ({ item, onOpen, setSelectedItem }) => {
         </Td>
         <Td isNumeric>{item.estoqueMin}</Td>
         <Td>
-          <HStack>
-            <Tooltip label='Editar'>
-              <IconButton
-                color='teal'
-                variant='ghost'
-                icon={<EditIcon />}
-                onClick={() => {
-                  setSelectedItem(item)
-                  onOpen()
-                }}
-              />
-            </Tooltip>
-            <Tooltip label='Excluir'>
-              <IconButton
-                color='red'
-                variant='ghost'
-                icon={<DeleteIcon />}
-                onClick={() => {
-                  let result = removeEstoqueItem(item.id)
-                  if (result) {
-                    toast({
-                      title: ``,
-                      description: 'Item removido :/',
-                      status: 'error',
-                      duration: 3000,
-                      isClosable: true,
-                    })
-                  }
-                }}
-              />
-            </Tooltip>
-          </HStack>
+          <VStack spacing={0}>
+            <HStack bgColor='gray.100'>
+              <Tooltip label='Adicionar'>
+                <IconButton
+                  size='sm'
+                  color='teal'
+                  variant='ghost'
+                  icon={<AddIcon />}
+                  onClick={() => {
+                    // setSelectedItem(item)
+                    // onOpen()
+                  }}
+                />
+              </Tooltip>
+              <Tooltip label='Remover'>
+                <IconButton
+                  size='sm'
+                  color='red'
+                  variant='ghost'
+                  icon={<MinusIcon />}
+                  onClick={() => {
+                    // let result = removeEstoqueItem(item.id)
+                    // if (result) {
+                    //   toast({
+                    //     title: ``,
+                    //     description: 'Item removido :/',
+                    //     status: 'error',
+                    //     duration: 3000,
+                    //     isClosable: true,
+                    //   })
+                    // }
+                  }}
+                />
+              </Tooltip>
+            </HStack>
+            <HStack>
+              <Tooltip label='Editar'>
+                <IconButton
+                  size='sm'
+                  color='teal'
+                  variant='ghost'
+                  icon={<EditIcon />}
+                  onClick={() => {
+                    setSelectedItem(item)
+                    onOpen()
+                  }}
+                />
+              </Tooltip>
+              <Tooltip label='Excluir'>
+                <IconButton
+                  size='sm'
+                  color='red'
+                  variant='ghost'
+                  icon={<DeleteIcon />}
+                  onClick={() => {
+                    let result = removeEstoqueItem(item.id)
+                    if (result) {
+                      toast({
+                        title: ``,
+                        description: 'Item removido :/',
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                      })
+                    }
+                  }}
+                />
+              </Tooltip>
+            </HStack>
+          </VStack>
         </Td>
       </Tr>
     </>
