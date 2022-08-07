@@ -29,7 +29,7 @@ function ModalUpdateItem({ isOpen, onClose, item, setSelectedItem }) {
       peso: item.peso,
       quantidade: item.quantidade,
     })
-  }, [isOpen])
+  }, [isOpen, editItem])
 
   //add new item to firestore
   async function handleItem(e) {
